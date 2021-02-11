@@ -10,7 +10,7 @@ module.exports = (db, updateAppointment) => {
       ORDER BY user_id
     `
     ).then(({ rows: tasks }) => {
-      console.log("RESP?", response);
+      // console.log("RESP?", response);
       console.log("TASKS?", tasks);
       response.json(
         tasks.reduce(

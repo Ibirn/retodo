@@ -11,6 +11,7 @@ const app = express();
 const db = require("./db");
 
 const tasks = require("./routes/tasks");
+const users = require("./routes/users");
 
 function read(file) {
   return new Promise((resolve, reject) => {
@@ -33,6 +34,7 @@ module.exports = function application(ENV, actions = { updateTask: () => {} }) {
   app.use(bodyparser.json());
 
   app.use("/api", tasks(db, actions.updateTask));
+  app.use("/api", users(db));
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
