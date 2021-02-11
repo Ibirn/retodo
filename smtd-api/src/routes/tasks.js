@@ -11,7 +11,7 @@ module.exports = (db, updateAppointment) => {
     `
     ).then(({ rows: tasks }) => {
       // console.log("RESP?", response);
-      console.log("TASKS?", tasks);
+      // console.log("TASKS?", tasks);
       response.json(
         tasks.reduce(
           (previous, current) => ({ ...previous, [current.id]: current }),
