@@ -21,17 +21,24 @@ export default function Register(props) {
   };
 
   const registrationSubmit = (e) => {
-    // e.preventDefault();
-    console.log("GRABBIN E: ", e);
-    axios.post(`/api/users`, e).then((response) => {
+    e.preventDefault();
+    console.log("GRABBIN E: ", registration);
+    axios.post(`/api/users`, registration).then((response) => {
       console.log("REGRESP: ", response.data);
     });
   };
 
   return (
     <div>
-      <form action="/api/users" method="POST">
+      <form>
         <div>
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            onChange={handleChange}
+            required
+          />
           <label htmlFor="email"></label>
           <input
             type="email"
@@ -48,7 +55,7 @@ export default function Register(props) {
             onChange={handleChange}
             required
           />
-          <button onClick={() => registrationSubmit(registration)}>
+          <button type="submit" onClick={(e) => registrationSubmit(e)}>
             Register
           </button>
         </div>
