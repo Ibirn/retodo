@@ -1,20 +1,27 @@
 const router = require("express").Router();
 
 module.exports = (db) => {
-  router.get("/users", (req, res) => {
-    const { email, password } = req.body;
+  router.get("/users", (request, response) => {
+    // console.log(req.body);
+    const { email, password } = request.body;
     db.query(
       `
       SELECT name
       FROM users
-      WHERE password = $1
-      AND email = $2
       `
+      // WHERE password = $1
+      // AND email = $2
     )
-      .then((data) => {
-        console.log("data?", data);
+      .then(({ rows: users }) => {
+        // console.log("data?", data.rows);
+        response.json(users);
       })
       .catch((error) => console.log("ERROR:", error));
   });
+
+  router.post("/users", (request, response) => {
+    console.log("???", request.body);
+  });
+
   return router;
 };
