@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
@@ -6,6 +7,13 @@ import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Search(props) {
+  useEffect(() => {
+    axios.get(`/api/tasks`).then((response) => {
+      console.log(response.data);
+    });
+    return () => {};
+  }, []);
+
   return (
     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
       <Row>
