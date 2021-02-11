@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 export default function Navbar(props) {
   return (
     <nav>
-      <h1>SMORT</h1>
+      <Link to={"/"}>
+        <h1>SMORT</h1>
+      </Link>
       <div>
         <Link to={"/register"}>
           <button>Register</button>
