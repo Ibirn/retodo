@@ -1,0 +1,14 @@
+nav {
+  display: flex;
+  // background-color: red;
+  justify-content: space-between;
+  width: 100%;
+  color: antiquewhite;
+
+  button {
+    width: auto;
+    // color: brown;
+    align-self: center;
+    margin: 0.5rem;
+  }
+}
