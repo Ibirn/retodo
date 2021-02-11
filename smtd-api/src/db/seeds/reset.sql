@@ -19,3 +19,7 @@ INSERT INTO tasks
   (user_id, category, created_on, due_date)
 values
   (1, 'book', '2021-02-03', '2021-05-06');
+INSERT INTO tasks
+  (user_id, category, created_on, due_date)
+values
+  (2, 'book', '2021-07-08', '2021-09-10');

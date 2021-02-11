@@ -6,10 +6,12 @@ module.exports = (db, updateAppointment) => {
       `
       SELECT *
       FROM tasks
-      GROUP BY user_id, category, created_on
+      GROUP BY user_id, category, created_on, tasks.id
       ORDER BY user_id
     `
     ).then(({ rows: tasks }) => {
+      console.log("RESP?", response);
+      console.log("TASKS?", tasks);
       response.json(
         tasks.reduce(
           (previous, current) => ({ ...previous, [current.id]: current }),
