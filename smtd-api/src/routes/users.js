@@ -1,5 +1,21 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
+///
+const tough = require("tough-cookie");
+const Cookie = tough.Cookie;
+// var cookie = Cookie.parse(header);
+// cookie.value = "somethingdifferent";
+// header = cookie.toString();
+
+// var cookiejar = new tough.CookieJar();
+// cookiejar.setCookie(cookie, "http://example.com/path", cb);
+// // ...
+// cookiejar.getCookies("http://example.com/otherpath", function (err, cookies) {
+//   res.headers["cookie"] = cookies.join("; ");
+// });
+// console.log("COOKIE: ", cookie);
+// console.log("COOKIE-JAR: ", cookiejar);
+///
 
 module.exports = (db) => {
   const emailInUseCheck = async (email, callback) => {
@@ -55,6 +71,7 @@ module.exports = (db) => {
             [username, email, hash]
           )
             .then(() => {
+              console.log(Cookie);
               response.redirect("/");
             })
             .catch((error) => console.log(error));
