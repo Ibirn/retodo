@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 export default function Register(props) {
   // useEffect(() => {
@@ -13,18 +14,27 @@ export default function Register(props) {
     password: "",
   });
 
+  const [error, setError] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+
   const handleChange = (e) => {
     setRegistration({
       ...registration,
       [e.target.name]: e.target.value.trim(),
     });
+    console.log(error);
   };
 
   const registrationSubmit = (e) => {
     e.preventDefault();
     console.log("GRABBIN E: ", registration);
     axios.post(`/api/users`, registration).then((response) => {
-      console.log("REGRESP: ", response.data);
+      console.log(response.data);
+      if (response.data === "ERROR - Email is already in use.") {
+        setError(true);
+      } else {
+        setRedirect(true);
+      }
     });
   };
 
@@ -60,6 +70,8 @@ export default function Register(props) {
           </button>
         </div>
       </form>
+      {error ? <p>Email already in use.</p> : <></>}
+      {redirect ? <Redirect to={"/"} /> : <></>}
     </div>
   );
 }
