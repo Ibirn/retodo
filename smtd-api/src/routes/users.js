@@ -3,16 +3,18 @@ const bcrypt = require("bcrypt");
 
 module.exports = (db) => {
   //issues with async
-  const emailInUseCheck = async (email) => {
+  const emailInUseCheck = async (email, callback) => {
     let check = await db.query(
       `
-    SELECT * 
-    FROM users 
-    WHERE email = $1
-    `,
+      SELECT * 
+      FROM users 
+      WHERE email = $1
+      `,
       [email]
     );
-    if (check.rows[0]) {
+
+    // console.log("yep", check.rows[0]);
+    if (check.rows[0] === undefined) {
       return false;
     } else {
       return true;
@@ -37,26 +39,33 @@ module.exports = (db) => {
   });
 
   router.post("/users", (request, response) => {
-    console.log("???", request.body);
+    // console.log("???", request.body);
     const { username, email, password } = request.body;
 
-    //
-    bcrypt.hash(password, 10, function (err, hash) {
-      db.query(
-        `
-          INSERT INTO users 
-          (name, email, password)
-          VALUES 
-          ( $1, $2, $3);
-  
-          `,
-        [username, email, hash]
-      )
-        .then(() => {
-          response.status(204).json({});
-        })
-        .catch((error) => console.log(error));
+    emailInUseCheck(email).then((res) => {
+      if (!res) {
+        bcrypt.hash(password, 10, function (err, hash) {
+          db.query(
+            `
+              INSERT INTO users 
+              (name, email, password)
+              VALUES 
+              ( $1, $2, $3);
+      
+              `,
+            [username, email, hash]
+          )
+            .then(() => {
+              response.status(204).json({});
+            })
+            .catch((error) => console.log(error));
+        });
+      } else {
+        console.log("EMAIL IN USE");
+      }
     });
+
+    //
     //
   });
 
