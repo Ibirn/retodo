@@ -2,7 +2,6 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 
 module.exports = (db) => {
-  //issues with async
   const emailInUseCheck = async (email, callback) => {
     let check = await db.query(
       `
@@ -56,12 +55,12 @@ module.exports = (db) => {
             [username, email, hash]
           )
             .then(() => {
-              response.status(204).json({});
+              response.redirect("/");
             })
             .catch((error) => console.log(error));
         });
       } else {
-        console.log("EMAIL IN USE");
+        response.send("ERROR - Email is already in use.");
       }
     });
 
