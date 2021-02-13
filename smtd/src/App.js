@@ -4,6 +4,7 @@ import Search from "./components/Search";
 import Lists from "./components/Lists";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
+import Login from "./components/Login";
 import { BrowserRouter, Route } from "react-router-dom";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         </header>
         <Route exact path="/" component={Lists} />
         <Route exact path="/register" component={Register} />
+        <Route exact path="/login" component={Login} />
       </BrowserRouter>
     </div>
   );

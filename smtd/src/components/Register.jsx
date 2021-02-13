@@ -22,14 +22,13 @@ export default function Register(props) {
       ...registration,
       [e.target.name]: e.target.value.trim(),
     });
-    console.log(error);
   };
 
   const registrationSubmit = (e) => {
     e.preventDefault();
     console.log("GRABBIN E: ", registration);
     axios.post(`/api/users`, registration).then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data === "ERROR - Email is already in use.") {
         setError(true);
       } else {
