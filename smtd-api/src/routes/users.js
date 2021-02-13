@@ -1,21 +1,5 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
-///
-const tough = require("tough-cookie");
-const Cookie = tough.Cookie;
-// var cookie = Cookie.parse(header);
-// cookie.value = "somethingdifferent";
-// header = cookie.toString();
-
-// var cookiejar = new tough.CookieJar();
-// cookiejar.setCookie(cookie, "http://example.com/path", cb);
-// // ...
-// cookiejar.getCookies("http://example.com/otherpath", function (err, cookies) {
-//   res.headers["cookie"] = cookies.join("; ");
-// });
-// console.log("COOKIE: ", cookie);
-// console.log("COOKIE-JAR: ", cookiejar);
-///
 
 module.exports = (db) => {
   const emailInUseCheck = async (email, callback) => {
@@ -28,7 +12,6 @@ module.exports = (db) => {
       [email]
     );
 
-    // console.log("yep", check.rows[0]);
     if (check.rows[0] === undefined) {
       return false;
     } else {
@@ -47,15 +30,21 @@ module.exports = (db) => {
       // AND email = $2
     )
       .then(({ rows: users }) => {
-        // console.log("data?", data.rows);
         response.json(users);
       })
       .catch((error) => console.log("ERROR:", error));
   });
 
   router.post("/users", (request, response) => {
-    // console.log("???", request.body);
     const { username, email, password } = request.body;
+
+    findByEmail(email, (err, data) => {
+      if (err) {
+        console.log("ERRCB");
+      } else {
+        console.log("CBSUCC", data);
+      }
+    });
 
     emailInUseCheck(email).then((res) => {
       if (!res) {
@@ -71,7 +60,8 @@ module.exports = (db) => {
             [username, email, hash]
           )
             .then(() => {
-              console.log(Cookie);
+              // response.cookie(thing, "whateversS");
+              // response.cookie("ham", "sandiwch");
               response.redirect("/");
             })
             .catch((error) => console.log(error));
@@ -80,9 +70,6 @@ module.exports = (db) => {
         response.send("ERROR - Email is already in use.");
       }
     });
-
-    //
-    //
   });
 
   return router;
