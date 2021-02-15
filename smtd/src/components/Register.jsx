@@ -10,6 +10,7 @@ export default function Register(props) {
   //   return () => {};
   // }, []);
   const [registration, setRegistration] = useState({
+    username: "",
     email: "",
     password: "",
   });
