@@ -7,60 +7,17 @@ const helmet = require("helmet");
 const cors = require("cors");
 
 const app = express();
-
-//PASSPORT STUFF
-const passport = require("passport");
-const Strategy = require("passport-local").Strategy;
-//strategy expecting a users file to export a function, findbyEmail
-passport.use(
-  new Strategy(function (email, password, cb) {
-    db.users.findByEmail(email, function (err, user) {
-      if (err) {
-        return cb(err);
-      }
-      if (!user) {
-        return cb(null, false);
-      }
-      bcrypt.compare(password, user.password).then((result) => {
-        if (!result) {
-          console.log("USEREX, PASSBAD");
-          return cb(null, false);
-        }
-        console.log("LOGGGGIN");
-        return cb(null, user);
-      });
-    });
-  })
-);
-
-const findByEmail = (email, cb) => {
-  console.log("MADE IT IN", email);
-  db.query(
-    `
-    SELECT * 
-    FROM users 
-    WHERE email = $1
-    `,
-    [email]
-  ).then((data) => {
-    console.log(data.rows[0]);
-    if (data.rows[0]) {
-      return cb(null, data.rows[0]);
-    }
-    return cb(null, null);
-  });
-};
-
 const db = require("./db");
-
-// console.log("DB:", db);
 
 const tasks = require("./routes/tasks");
 const users = require("./routes/users");
 const login = require("./routes/login");
-const {
-  findByUsername,
-} = require("../../../express-4.x-local-example/db/users");
+
+const passport = require("passport");
+const initializePassport = require("./passportConfig");
+initializePassport(passport);
+const flash = require("express-flash");
+const session = require("express-session");
 
 function read(file) {
   return new Promise((resolve, reject) => {
@@ -78,9 +35,19 @@ function read(file) {
 }
 
 module.exports = function application(ENV, actions = { updateTask: () => {} }) {
-  app.use(cors({ exposedHeaders: ["set-cookie"], credentials: true }));
+  app.use(cors());
   app.use(helmet());
   app.use(bodyparser.json());
+  app.use(flash());
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.use("/api", tasks(db, actions.updateTask));
   app.use("/api", users(db));

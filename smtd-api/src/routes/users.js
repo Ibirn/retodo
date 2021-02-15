@@ -37,14 +37,7 @@ module.exports = (db) => {
 
   router.post("/users", (request, response) => {
     const { username, email, password } = request.body;
-
-    findByEmail(email, (err, data) => {
-      if (err) {
-        console.log("ERRCB");
-      } else {
-        console.log("CBSUCC", data);
-      }
-    });
+    // console.log(request.body);
 
     emailInUseCheck(email).then((res) => {
       if (!res) {
