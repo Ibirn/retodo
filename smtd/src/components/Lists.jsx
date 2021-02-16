@@ -8,9 +8,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Search(props) {
   useEffect(() => {
-    axios.get(`/api/tasks`).then((response) => {
-      console.log(response.data);
-    });
+    axios
+      .get(`/api/tasks`)
+      .then((response) => {
+        console.log(response.user);
+        console.log("USER TASKS: ", response.data);
+        if (response.data.user) {
+          props.setName(response.data.user);
+        }
+      })
+      .catch((err) => console.log(err));
     return () => {};
   }, []);
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 
 export default function Login(props) {
@@ -6,6 +7,7 @@ export default function Login(props) {
     email: "",
     password: "",
   });
+  const [successRedirect, setSuccessRedirect] = useState(false);
 
   const handleChange = (e) => {
     setLogin({
@@ -17,9 +19,16 @@ export default function Login(props) {
   const loginSubmit = (e) => {
     e.preventDefault();
     console.log("GRABBIN LOG: ", login);
-    axios.post(`/api/login`, login).then((response) => {
-      console.log(response.data);
-    });
+    axios
+      .post(`/api/login`, login)
+      .then((response) => {
+        if (response.status === 200) {
+          setSuccessRedirect(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -48,6 +57,7 @@ export default function Login(props) {
       <div>
         <input type="submit" value="Log In" onClick={(e) => loginSubmit(e)} />
       </div>
+      {successRedirect ? <Redirect to={"/"} /> : <></>}
     </form>
   );
 }
