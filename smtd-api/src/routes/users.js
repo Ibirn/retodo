@@ -37,7 +37,6 @@ module.exports = (db) => {
 
   router.post("/users", (request, response) => {
     const { username, email, password } = request.body;
-    // console.log(request.body);
 
     emailInUseCheck(email).then((res) => {
       if (!res) {
@@ -53,8 +52,6 @@ module.exports = (db) => {
             [username, email, hash]
           )
             .then(() => {
-              // response.cookie(thing, "whateversS");
-              // response.cookie("ham", "sandiwch");
               response.redirect("/");
             })
             .catch((error) => console.log(error));

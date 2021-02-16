@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 
 const db = require("./db");
 
-const findByEmail = (email, cb) => {
-  console.log("MADE IT IN", email);
+const getUserByEmail = (email, cb) => {
+  // console.log("MADE IT IN", email);
   db.query(
     `
     SELECT *
@@ -14,71 +14,74 @@ const findByEmail = (email, cb) => {
     [email]
   ).then((data) => {
     if (data.rows[0]) {
-      console.log("USEREXISTS", data.rows[0]);
+      // console.log("GETEMAILEXISTS", data.rows[0]);
 
       return cb(null, data.rows[0]);
     }
-    console.log("NOSUCHUSER");
+    // console.log("NOSUCHEMAIL");
     return cb(null, null);
   });
 };
-/*
-const findByEmail = (username, cb) => {
-  console.log("MADE IT IN", username);
+
+const getUserById = (id, cb) => {
+  // console.log("GETIDCHECK: ", id);
   db.query(
     `
     SELECT *
     FROM users
-    WHERE name = $1
+    WHERE id = $1
     `,
-    [username]
+    [id]
   ).then((data) => {
-    console.log("THIS YER USER??", data.rows[0]);
     if (data.rows[0]) {
+      // console.log("GETUSEREXISTS", data.rows[0]);
+
       return cb(null, data.rows[0]);
     }
+    // console.log("NOSUCHUSER");
     return cb(null, null);
   });
 };
 
-const findById = (id, cb) => {
-  if (id) {
-    return cb(null, id);
-  }
-  return cb(null, null);
-};
-*/
 function initialize(passport) {
+  //this gets called with passport
   const authenticateUser = async (email, password, done) => {
-    console.log(done);
     //get user object or null with findbyemail
-    await findByEmail(email, async (err, data) => {
-      // if (err) {
-      //   console.log("AUTHCBERR: ", err);
-      // } else {
-      //   console.log("?????", data);
-
+    await getUserByEmail(email, async (err, data) => {
       if (data === null) {
+        //no user, no error
+        // console.log("NO USER, NO ERR");
         return done(null, false, { message: "No user with email" });
       }
       try {
         if (await bcrypt.compare(password, data.password)) {
-          console.log("IT DID IT");
+          //user and password match
+          // console.log("LOGIN SUCC");
           return done(null, data);
         } else {
-          console.log("IT DIDN'T DO IT");
+          //user and password do not match
+          // console.log("BAD PASS");
           return done(null, false, { message: "pass wrong" });
         }
       } catch (err) {
+        //error
+        // console.log("ERR");
         return done(err);
       }
     });
   };
 
   passport.use(new LocalStrategy({ usernameField: "email" }, authenticateUser));
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+  passport.deserializeUser(async (id, done) => {
+    await getUserById(id, (err, data) => {
+      // console.log("GOT ID: ", id);
 
-  passport.serializeUser((user, done) => {});
-  passport.deserializeUser((id, done) => {});
+      return done(null, data);
+    });
+  });
 }
 
 module.exports = initialize;

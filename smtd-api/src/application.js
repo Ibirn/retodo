@@ -1,18 +1,23 @@
+//for resetting DEV database
 const fs = require("fs");
 const path = require("path");
 
+//Server setup
 const express = require("express");
 const bodyparser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
 
+//create server and access database
 const app = express();
 const db = require("./db");
 
+//setup routes
 const tasks = require("./routes/tasks");
 const users = require("./routes/users");
 const login = require("./routes/login");
 
+//setup passport authentication for sessions
 const passport = require("passport");
 const initializePassport = require("./passportConfig");
 initializePassport(passport);
@@ -46,6 +51,7 @@ module.exports = function application(ENV, actions = { updateTask: () => {} }) {
       saveUninitialized: false,
     })
   );
+  //set up passport then save for session
   app.use(passport.initialize());
   app.use(passport.session());
 
