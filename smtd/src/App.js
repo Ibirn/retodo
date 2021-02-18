@@ -1,6 +1,4 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Search from "./components/Search";
 import Lists from "./components/Lists";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
@@ -14,7 +12,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <header className="App-header">
-          <Navbar name={name} />
+          <Navbar setName={setName} name={name} />
         </header>
         <Route
           exact
@@ -22,7 +20,11 @@ function App() {
           render={(props) => <Lists {...props} setName={setName} />}
         />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
+        <Route
+          exact
+          path="/login"
+          render={(props) => <Login {...props} name={name} setName={setName} />}
+        />
       </BrowserRouter>
     </div>
   );

@@ -6,10 +6,10 @@ import Login from "./Login";
 
 export default function Navbar(props) {
   const [showLogin, setShowLogin] = useState(false);
-  console.log(props);
+  // console.log(props);
   useEffect(() => {
     axios.get("/").then((res) => {
-      console.log("NAVRES: ", res);
+      // console.log("NAVRES: ", res);
     });
   }, [props.name]);
 
@@ -25,6 +25,17 @@ export default function Navbar(props) {
         console.log("NOPE", err);
       });
   };
+  const handleClickClose = (e) => {
+    console.log(e);
+  };
+
+  useEffect(() => {
+    let dropdown = document.getElementById("login-dropdown");
+    if (dropdown !== null) {
+      document.addEventListener("click", handleClickClose);
+    }
+    // console.log(dropdown);
+  }, [showLogin]);
 
   return (
     <nav>

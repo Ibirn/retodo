@@ -65,20 +65,19 @@ export default function Login(props) {
   // );
 
   return (
-    <div className="form-wrapper">
+    <div id="login-dropdown" className="form-wrapper">
       <form action="/api/login" method="post">
         <dl>
           <dt>
             <div>
-              <label for="email">Your email address:</label>
+              <label htmlFor="email">Your email address:</label>
             </div>
           </dt>
           <dd>
             <input
               type="email"
               name="email"
-              autofocus="autofocus"
-              autocomplete="username"
+              autoFocus="autofocus"
               id="email"
               onChange={handleChange}
               required
@@ -87,7 +86,7 @@ export default function Login(props) {
         </dl>
         <dl>
           <dt>
-            <label for="password">Password:</label>
+            <label htmlFor="password">Password:</label>
           </dt>
           <dd>
             <input

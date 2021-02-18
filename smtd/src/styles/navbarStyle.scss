@@ -3,12 +3,17 @@ nav {
   // background-color: red;
   justify-content: space-between;
   width: 100%;
-  color: antiquewhite;
+  color: #f4f4f4;
+  font-family: "Montserrat", sans-serif;
 
   button {
     width: auto;
-    // color: brown;
+    color: #f4f4f4;
     align-self: center;
     margin: 0.5rem;
+    border: 0.25rem solid #f4f4f4;
+
+    background-color: #f16a70;
+    border-radius: 0.5rem;
   }
 }
