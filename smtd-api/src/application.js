@@ -83,5 +83,11 @@ module.exports = function application(ENV, actions = { updateTask: () => {} }) {
     return db.end();
   };
 
+  app.post("/logout", (req, res) => {
+    console.log("ANYTHING? ", req.data);
+    req.logOut();
+    res.send("LOGOUT");
+  });
+
   return app;
 };
