@@ -3,14 +3,48 @@ import "../styles/navbarStyle.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Login from "./Login";
+import ReactDOM from "react-dom";
 
 export default function Navbar(props) {
-  const [showLogin, setShowLogin] = useState(false);
-  // console.log(props);
+  const hintLabel = "Login";
+
+  const ToggleContent = ({ toggle, content }) => {
+    const [isShown, setIsShown] = useState(false);
+    const show = () => setIsShown(true);
+    const hide = () => setIsShown(false);
+
+    useEffect(() => {
+      const catchBubble = (e) => {
+        for (let elem of e.path) {
+          if (elem.className === "form-wrapper") {
+            return true;
+          }
+        }
+        return false;
+      };
+
+      const handleClick = (e) => {
+        if (e.target && !catchBubble(e)) {
+          return setIsShown(false);
+        }
+      };
+      if (isShown) {
+        window.addEventListener("click", handleClick);
+      }
+      return () => {
+        window.removeEventListener("click", handleClick);
+      };
+    }, [isShown]);
+    return (
+      <>
+        {toggle(show)}
+        {isShown && content(hide)}
+      </>
+    );
+  };
+
   useEffect(() => {
-    axios.get("/").then((res) => {
-      // console.log("NAVRES: ", res);
-    });
+    axios.get("/").then((res) => {});
   }, [props.name]);
 
   const logout = (e) => {
@@ -25,17 +59,6 @@ export default function Navbar(props) {
         console.log("NOPE", err);
       });
   };
-  const handleClickClose = (e) => {
-    console.log(e);
-  };
-
-  useEffect(() => {
-    let dropdown = document.getElementById("login-dropdown");
-    if (dropdown !== null) {
-      document.addEventListener("click", handleClickClose);
-    }
-    // console.log(dropdown);
-  }, [showLogin]);
 
   return (
     <nav>
@@ -52,11 +75,14 @@ export default function Navbar(props) {
             <Link to={"/register"}>
               <button>Register</button>
             </Link>
-            {/* <Link to={"/login"}>
-              <button>Login</button>
-            </Link> */}
-            <button onClick={() => setShowLogin(true)}>Login</button>
-            {showLogin ? <Login /> : <></>}
+            <ToggleContent
+              toggle={(show) => (
+                <div onClick={show}>
+                  <div className={"hint__label-text"}>{hintLabel}</div>
+                </div>
+              )}
+              content={(hide) => <Login />}
+            />
           </>
         )}
       </div>
