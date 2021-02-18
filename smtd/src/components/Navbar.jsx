@@ -1,15 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/navbarStyle.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Login from "./Login";
 
 export default function Navbar(props) {
+  const [showLogin, setShowLogin] = useState(false);
   console.log(props);
   useEffect(() => {
     axios.get("/").then((res) => {
       console.log("NAVRES: ", res);
     });
   }, [props.name]);
+
+  const logout = (e) => {
+    e.preventDefault();
+    axios
+      .post(`/logout`)
+      .then((response) => {
+        props.setName("");
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log("NOPE", err);
+      });
+  };
 
   return (
     <nav>
@@ -18,15 +33,19 @@ export default function Navbar(props) {
       </Link>
       <div>
         {props.name ? (
-          <button>Logout</button>
+          <button type="submit" onClick={(e) => logout(e)}>
+            Logout
+          </button>
         ) : (
           <>
             <Link to={"/register"}>
               <button>Register</button>
             </Link>
-            <Link to={"/login"}>
+            {/* <Link to={"/login"}>
               <button>Login</button>
-            </Link>
+            </Link> */}
+            <button onClick={() => setShowLogin(true)}>Login</button>
+            {showLogin ? <Login /> : <></>}
           </>
         )}
       </div>
