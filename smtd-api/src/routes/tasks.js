@@ -15,15 +15,15 @@ module.exports = (db, updateAppointment) => {
     `,
       [request.user.id]
     ).then(({ rows: tasks }) => {
-      console.log("USER: ", request.user);
+      console.log("USER: ", tasks);
 
-      let list = tasks.reduce(
-        (previous, current) => ({ ...previous, [current.id]: current }),
-        {}
-      );
+      // let list = tasks.reduce(
+      //   (previous, current) => ({ ...previous, [current.id]: current }),
+      //   {}
+      // );
 
       response.json({
-        tasks: list,
+        tasks: tasks,
         user: request.user.name,
       });
     });
