@@ -16,6 +16,7 @@ const db = require("./db");
 const tasks = require("./routes/tasks");
 const users = require("./routes/users");
 const login = require("./routes/login");
+const query = require("./routes/query");
 
 //setup passport authentication for sessions
 const passport = require("passport");
@@ -58,6 +59,7 @@ module.exports = function application(ENV, actions = { updateTask: () => {} }) {
   app.use("/api", tasks(db, actions.updateTask));
   app.use("/api", users(db));
   app.use("/api", login(db));
+  app.use("/api", query(db));
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
