@@ -3,10 +3,9 @@ import "../styles/navbarStyle.scss";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Login from "./Login";
-import ReactDOM from "react-dom";
 
 export default function Navbar(props) {
-  const hintLabel = "Login";
+  const { setName } = props;
 
   const ToggleContent = ({ toggle, content }) => {
     const [isShown, setIsShown] = useState(false);
@@ -43,17 +42,12 @@ export default function Navbar(props) {
     );
   };
 
-  useEffect(() => {
-    axios.get("/").then((res) => {});
-  }, [props.name]);
-
   const logout = (e) => {
     e.preventDefault();
     axios
       .post(`/logout`)
       .then((response) => {
         props.setName("");
-        console.log(response);
       })
       .catch((err) => {
         console.log("NOPE", err);
@@ -65,7 +59,7 @@ export default function Navbar(props) {
       <Link to={"/"}>
         <h1>SMORT</h1>
       </Link>
-      <div>
+      <div className="button-wrapper">
         {props.name ? (
           <button type="submit" onClick={(e) => logout(e)}>
             Logout
@@ -78,10 +72,10 @@ export default function Navbar(props) {
             <ToggleContent
               toggle={(show) => (
                 <div onClick={show}>
-                  <div className={"hint__label-text"}>{hintLabel}</div>
+                  <button>Login</button>
                 </div>
               )}
-              content={(hide) => <Login />}
+              content={(hide) => <Login setName={setName} />}
             />
           </>
         )}

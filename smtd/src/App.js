@@ -2,7 +2,6 @@ import "./App.css";
 import Lists from "./components/Lists";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
-import Login from "./components/Login";
 import { BrowserRouter, Route } from "react-router-dom";
 import { useState } from "react";
 
@@ -17,14 +16,9 @@ function App() {
         <Route
           exact
           path="/"
-          render={(props) => <Lists {...props} setName={setName} />}
+          render={(props) => <Lists {...props} name={name} />}
         />
         <Route exact path="/register" component={Register} />
-        <Route
-          exact
-          path="/login"
-          render={(props) => <Login {...props} name={name} setName={setName} />}
-        />
       </BrowserRouter>
     </div>
   );

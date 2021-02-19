@@ -8,8 +8,6 @@ export default function Login(props) {
     email: "",
     password: "",
   });
-  const [success, setSuccess] = useState(false);
-
   const handleChange = (e) => {
     setLogin({
       ...login,
@@ -19,50 +17,19 @@ export default function Login(props) {
 
   const loginSubmit = (e) => {
     e.preventDefault();
-    console.log("GRABBIN LOG: ", login);
     axios
       .post(`/api/login`, login)
       .then((response) => {
         if (response.status === 200) {
-          setSuccess(true);
+          axios.get(`/api/tasks`).then((response) => {
+            props.setName(response.data.user);
+          });
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  // return (
-  //   <form action="/api/login" method="post">
-  //     <div>
-  //       <label>Username:</label>
-  //       <input
-  //         type="email"
-  //         id="email"
-  //         name="email"
-  //         onChange={handleChange}
-  //         required
-  //       />
-  //       <br />
-  //     </div>
-  //     <div>
-  //       <label>Password:</label>
-  //       <input
-  //         type="password"
-  //         id="password"
-  //         name="password"
-  //         onChange={handleChange}
-  //         required
-  //       />
-  //     </div>
-  //     <div>
-  //       <button type="submit" onClick={(e) => loginSubmit(e)}>
-  //         Log In
-  //       </button>
-  //     </div>
-  //     {successRedirect ? <Redirect to={"/"} /> : <></>}
-  //   </form>
-  // );
 
   return (
     <div id="login-dropdown" className="form-wrapper">
