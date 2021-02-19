@@ -10,17 +10,31 @@ export default function Search(props) {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`/api/tasks`)
-      .then((response) => {
-        setTasks(() => [...response.data.tasks]);
-      })
-      .catch((err) => {
-        console.log(err);
-        setTasks(() => []);
-      });
+    if (props.name) {
+      axios
+        .get(`/api/tasks`)
+        .then((response) => {
+          setTasks(() => [...response.data.tasks]);
+        })
+        .catch((err) => {
+          console.log(err);
+          setTasks(() => []);
+        });
+    } else {
+      setTasks(() => []);
+    }
     return () => {};
   }, [props.name]);
+
+  useEffect(() => {
+    console.log(tasks);
+  }, [tasks]);
+
+  const writeList = (category) => {
+    return tasks
+      .filter((task) => task.category === category)
+      .map((elem, ind) => <li key={ind}>{elem.id}</li>);
+  };
 
   return (
     <Tab.Container id="left-tabs-example" defaultActiveKey="first">
@@ -41,14 +55,7 @@ export default function Search(props) {
               <p>A butt</p>
             </Tab.Pane>
             <Tab.Pane eventKey="second">
-              <div>
-                {tasks
-                  .filter((task) => task.category === "book")
-                  .map((filteredBook) => {
-                    console.log(filteredBook);
-                    return <li>{filteredBook.id}</li>;
-                  })}
-              </div>
+              <div>{writeList("book")}</div>
             </Tab.Pane>
           </Tab.Content>
         </Col>
