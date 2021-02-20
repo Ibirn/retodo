@@ -72,12 +72,16 @@ function initialize(passport) {
   };
 
   passport.use(new LocalStrategy({ usernameField: "email" }, authenticateUser));
+
   passport.serializeUser((user, done) => {
+    // console.log("SERIALISE: ", user);
     done(null, user.id);
   });
+
   passport.deserializeUser(async (id, done) => {
     await getUserById(id, (err, data) => {
       // console.log("GOT ID: ", id);
+      // console.log("DESERIALDAT: ", data);
 
       return done(null, data);
     });

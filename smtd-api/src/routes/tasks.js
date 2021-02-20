@@ -4,6 +4,7 @@ const { checkAuth, checkNotAuth } = require("../authHelpers");
 
 module.exports = (db, updateAppointment) => {
   router.get("/tasks", checkAuth, (request, response) => {
+    console.log("TASKUS:", request.user);
     if (request.user.id) {
       db.query(
         `
@@ -16,7 +17,7 @@ module.exports = (db, updateAppointment) => {
       `,
         [request.user.id]
       ).then(({ rows: tasks }) => {
-        console.log("USER: ", tasks);
+        // console.log("USER: ", tasks);
 
         // let list = tasks.reduce(
         //   (previous, current) => ({ ...previous, [current.id]: current }),

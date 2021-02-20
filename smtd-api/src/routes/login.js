@@ -5,15 +5,14 @@ const { checkNotAuth } = require("../authHelpers");
 module.exports = (db) => {
   router.post(
     "/login",
-    // (req, res) => {
-    //   console.log(req.body);
-    // },
-    checkNotAuth,
     passport.authenticate("local", {
       successRedirect: "/",
       failureRedirect: "/register",
-      failureFlash: true,
-    })
+      session: true,
+    }),
+    (req, res) => {
+      console.log(req.user);
+    }
   );
 
   return router;

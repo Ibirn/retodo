@@ -7,6 +7,9 @@ const express = require("express");
 const bodyparser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
+const flash = require("express-flash");
+const session = require("express-session");
+const passport = require("passport");
 
 //create server and access database
 const app = express();
@@ -19,11 +22,8 @@ const login = require("./routes/login");
 const query = require("./routes/query");
 
 //setup passport authentication for sessions
-const passport = require("passport");
 const initializePassport = require("./passportConfig");
 initializePassport(passport);
-const flash = require("express-flash");
-const session = require("express-session");
 
 function read(file) {
   return new Promise((resolve, reject) => {
@@ -47,7 +47,7 @@ module.exports = function application(ENV, actions = { updateTask: () => {} }) {
   app.use(flash());
   app.use(
     session({
-      secret: process.env.SESSION_SECRET,
+      secret: "cats",
       resave: false,
       saveUninitialized: false,
     })
