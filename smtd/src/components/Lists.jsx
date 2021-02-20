@@ -10,19 +10,19 @@ export default function Search(props) {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    // if (props.name) {
-    axios
-      .get(`/api/tasks`)
-      .then((response) => {
-        setTasks(() => [...response.data.tasks]);
-      })
-      .catch((err) => {
-        console.log(err);
-        setTasks(() => []);
-      });
-    // } else {
-    //   setTasks(() => []);
-    // }
+    if (props.name) {
+      axios
+        .get(`/api/tasks`)
+        .then((response) => {
+          setTasks(() => [...response.data.tasks]);
+        })
+        .catch((err) => {
+          console.log(err);
+          setTasks(() => []);
+        });
+    } else {
+      setTasks(() => []);
+    }
     return () => {};
   }, []);
 
