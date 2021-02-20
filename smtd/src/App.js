@@ -2,6 +2,7 @@ import "./App.css";
 import Lists from "./components/Lists";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
+import TaskFrame from "./components/TaskFrame";
 import { BrowserRouter, Route } from "react-router-dom";
 import { useState } from "react";
 
@@ -16,7 +17,7 @@ function App() {
         <Route
           exact
           path="/"
-          render={(props) => <Lists {...props} name={name} />}
+          render={(props) => <TaskFrame {...props} name={name} />}
         />
         <Route exact path="/register" component={Register} />
       </BrowserRouter>
